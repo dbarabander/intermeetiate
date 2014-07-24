@@ -1,97 +1,136 @@
-/* 
-Project Name: Blank Template
-Client: Your Client
-Author: Your Name
-Developer @GA in NYC
-*/
 
-
-/******************************************
-/* SETUP                   
-/*******************************************/
-
-/* Box Model Hack */
-* {
-     -moz-box-sizing: border-box; /* Firexfox */
-     -webkit-box-sizing: border-box; /* Safari/Chrome/iOS/Android */
-     box-sizing: border-box; /* IE */
+header{
+    background-color: #2E5462;
+    color: #FF845C;
+    height: 80px;
+    padding-left: 40px;
+    font-family: 'Alegreya Sans SC', sans-serif;
 }
 
-/* Clear fix hack */
-/*.clearfix:after {
-     content: ".";
-     display: block;
-     clear: both;
-     visibility: hidden;
-     line-height: 0;
-     height: 0;
+header h1{
+    padding-top: 20px;
+    font-size: 200%;
 }
 
-.clear {
-	clear: both;
+header p{
+    padding-top: 5px;
+    font-size: 75%;
 }
 
-.alignright {
-	float: right; 
-	padding: 0 0 10px 10px; /* note the padding around a right floated image */
+#logo{
+    width: 192px;
+    height: auto;
+    text-align: center;
 }
 
-/*.alignleft {
-	float: left; 
-	padding: 0 10px 10px 0; *//* note the padding around a left floated image 
-}*/
-
-/******************************************
-/* BASE STYLES                   
-/*******************************************/
-/*
-body {
-     color: #000;
-     font-size: 12px;
-     line-height: 1.4;
-     font-family: Helvetica, Arial, sans-serif;
-}
-*/
-
-/******************************************
-/* LAYOUT                   
-/*******************************************/
-
-/* Center the container */
-
-#main{
-      position: relative; 
-      z-index: 1; /* The z-index should be higher than Google Maps */
-      width: 300px;
-      margin: 60px auto 0;
-      padding: 10px;
-      background: black;
-      height: 300px;
-      opacity: .45; /* Set the opacity for a slightly transparent Google Form */ 
-      color: white;
+body{
+    height: 100%;
 }
 
-#map-canvas { 
-      height: 100%; 
-      width: 100%; 
-      position:absolute; 
-      top: 0; 
-      left: 0; 
-      z-index: 0;
-}
-   
-header {
 
+#map-canvas{
+    height: 950px;
+    width: 100%;
+    z-index: 0;
+    position: relative;
 }
 
 footer {
-
+  background-color: #2E5462;
+  color: #00A4A3;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 90px;
+  overflow: hidden;
+  font-size: 15px;
+  line-height: 50px;
+  padding: 0 30px;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  min-width: 800px;
+   font-family: 'Alegreya Sans SC', sans-serif;
 }
 
-/******************************************
-/* ADDITIONAL STYLES                   
-/*******************************************/
+footer ul{
+    padding-top: 20px;
+}
 
 
+.rightfooter{
+  display: inline;
+  float: right;
+  padding-right: 20px;
+}
+
+.leftfooter{
+  display: inline;
+  float: left;
+}
+
+.rightfooter a:visited{
+     text-decoration: none;
+     color: #00B6B5;
+}
+
+.rightfooter a:link {
+     text-decoration: none;
+     color: #00B6B5;
+}
+
+.rightfooter a:hover{
+     text-decoration: none;
+     color: #FF845C;
+}
+
+.rightfooter a:active{ 
+     text-decoration: none;
+     color: #00B6B5;
+}
 
 
+ .controls {
+        margin-top: 16px;
+        border: 1px solid transparent;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        height: 32px;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
+
+      #location_one,#location_two {
+        background-color: #fff;
+        padding: 0 11px 0 13px;
+        width: 400px;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        text-overflow: ellipsis;
+        display: inline-block;
+        margin-bottom: 500px;
+
+      }
+
+     #location_one,#location_two:focus {
+        border-color: #4d90fe;
+        margin-left: -1px;
+        padding-left: 14px;  /* Regular padding-left + 1. */
+        width: 401px;
+      }
+
+
+      #type-selector {
+        color: #fff;
+        background-color: #4d90fe;
+        padding: 5px 11px 0px 11px;
+      }
+
+      #type-selector label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
