@@ -29,7 +29,7 @@ body{
 
 
 #map-canvas{
-    height: 950px;
+    height: 750px;
     width: 100%;
     z-index: 0;
     position: relative;
@@ -56,6 +56,16 @@ footer {
 
 footer ul{
     padding-top: 20px;
+}
+
+#submit{
+
+    width: 50px;
+    height: 20px;
+    z-index: 1;
+    position: absolute;
+    top: 160px;
+    left: 500px;
 }
 
 
@@ -102,7 +112,7 @@ footer ul{
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
       }
 
-      #location_one,#location_two {
+      #location_one, #location_two, #what_do {
         background-color: #fff;
         padding: 0 11px 0 13px;
         width: 400px;
@@ -111,16 +121,45 @@ footer ul{
         font-weight: 300;
         text-overflow: ellipsis;
         display: inline-block;
-        margin-bottom: 500px;
-
+        position: absolute;
       }
 
-     #location_one,#location_two:focus {
+      #location_one{
+        right: 80px;
+        top: 10px;
+      }
+
+      #location_two{
+        right: 80px;
+        top: 50px;
+      }
+
+      #what_do{
+        right: 80px;
+        top: 90px;
+      }
+    
+
+    #what_do:focus {
         border-color: #4d90fe;
         margin-left: -1px;
         padding-left: 14px;  /* Regular padding-left + 1. */
         width: 401px;
+
       }
+    #location_one:focus{
+       border-color: #4d90fe;
+        margin-left: -1px;
+        padding-left: 14px;  /* Regular padding-left + 1. */
+        width: 401px;
+    }
+
+     #location_two:focus{
+       border-color: #4d90fe;
+        margin-left: -1px;
+        padding-left: 14px;  /* Regular padding-left + 1. */
+        width: 401px;
+    }
 
 
       #type-selector {
