@@ -29,7 +29,7 @@ body{
 
 
 #map-canvas{
-    height: 950px;
+    height: 560px;
     width: 100%;
     z-index: 0;
     position: relative;
@@ -42,7 +42,7 @@ footer {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 90px;
+  height: 70px;
   overflow: hidden;
   font-size: 15px;
   line-height: 50px;
@@ -55,7 +55,38 @@ footer {
 }
 
 footer ul{
-    padding-top: 20px;
+    padding-top: 13px;
+}
+
+#search{
+
+    width: 120px;
+    height: 40px;
+    z-index: 1;
+    position: absolute;
+    top: 280px;
+    left: 380px;
+    background-color: RGBA(255, 132, 92, .9);
+    text-align: center;  
+
+}
+
+#search p{
+  padding-top: 12px;
+  color: #2E5462;
+  font-family: 'Alegreya Sans SC', sans-serif;
+}
+
+#search:active{
+  width: 120px;
+    height: 40px;
+    z-index: 1;
+    position: absolute;
+    top: 280px;
+    left: 380px;
+    background-color: RGBA(255, 132, 92, 1);
+    text-align: center;    
+
 }
 
 
@@ -102,7 +133,7 @@ footer ul{
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
       }
 
-      #location_one,#location_two {
+      #location_one, #location_two, #what_do {
         background-color: #fff;
         padding: 0 11px 0 13px;
         width: 400px;
@@ -111,16 +142,52 @@ footer ul{
         font-weight: 300;
         text-overflow: ellipsis;
         display: inline-block;
-        margin-bottom: 500px;
-
+        position: absolute;
       }
 
-     #location_one,#location_two:focus {
+      #location_one{
+    left: 100px;
+      top: -60px;
+      }
+
+      #location_two{
+      left: 100px;
+      top: -20px;
+      }
+
+      #what_do{
+      left: 100px;
+      top: 20px;
+      }
+    
+
+    #searchboxes{
+      z-index: 1;
+     top : 200px;
+     position: absolute;
+      
+    }
+
+    #what_do:focus {
         border-color: #4d90fe;
         margin-left: -1px;
         padding-left: 14px;  /* Regular padding-left + 1. */
         width: 401px;
+
       }
+    #location_one:focus{
+       border-color: #4d90fe;
+        margin-left: -1px;
+        padding-left: 14px;  /* Regular padding-left + 1. */
+        width: 401px;
+    }
+
+     #location_two:focus{
+       border-color: #4d90fe;
+        margin-left: -1px;
+        padding-left: 14px;  /* Regular padding-left + 1. */
+        width: 401px;
+    }
 
 
       #type-selector {
