@@ -1,10 +1,11 @@
 var map;
+var service;
 
 
 function initialize() {
   var address1 = [];
   var address2 = [];
-  
+
   geocoder = new google.maps.Geocoder();
   var mapOptions = {
     zoom: 12
@@ -17,13 +18,6 @@ function initialize() {
     navigator.geolocation.getCurrentPosition(function(position) {
       var pos = new google.maps.LatLng(position.coords.latitude,
                                        position.coords.longitude);
-
-      // var infowindow = new google.maps.InfoWindow({
-      //   map: map,
-      //   position: pos,
-      //   content: 'Location found using HTML5.'
-      // });
-
       map.setCenter(pos);
     }, function() {
       handleNoGeolocation(true);
@@ -31,35 +25,129 @@ function initialize() {
   } else {
     // Browser doesn't support Geolocation
     handleNoGeolocation(false);
+  };
+
+
+$('#what_do').keypress(function(e){
+        if(e.which == 13){//Enter key pressed
+            $('#search').click();//Trigger search button click event
+        }
+    });
+
+$('#search').click(function(){
+
+//slide search boxes out and display results
+
+$('#leftcontainer').hide('slide', {direction: 'right'}, 1000);
+$('#results').show('slide', {direction: 'right'}, 1000);
+
+
+//plot the two locations
+    address1Val = $("#location_one").val(); 
+    address2Val = $("#location_two").val();
+    // midpoint 
+
+//ensure the user cannot plot multiple locations
+  if (address1.length < 1) {
+    address1.push(address1Val);
+    getGeoCodeAddress(address1[0]);
   }
 
-var markers = [];
+  if (address2.length < 1) {
+    address2.push(address2Val);
+    getGeoCodeAddress(address2[0]);
+  }
 
-  // Create the search box and link it to the UI element.
-  var input = /** @type {HTMLInputElement} */(
-      document.getElementById('what_do'));
-  // map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+  getGeoCodeAddress()
 
-  var searchBox = new google.maps.places.SearchBox(
-    /** @type {HTMLInputElement} */(input));
+  function getGeoCodeAddress(address) {
+    var lat_long;
+    var callback = function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        lat_long_hash = results[0].geometry.location;
+        // console.log(lat_long_hash);
+        map.setCenter(results[0].geometry.location);
+        var marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location
+        });
+        checkForBothLocations(lat_long_hash);
+      } else {
+        // alert("Geocode was not successful for the following reason: " + status);
+      }
+      // console.log (lat_long_hash);
+    };
 
-  // Listen for the event fired when the user selects an item from the
-  // pick list. Retrieve the matching places for that item.
-  google.maps.event.addListener(searchBox, 'places_changed', function() {
-    var places = searchBox.getPlaces();
+geocoder.geocode({'address': address}, callback);
+  }
 
-    if (places.length == 0) {
-      return;
+  var first_complete_lat_long_hash = {};
+  var second_complete_lat_long_hash = {};
+
+  function checkForBothLocations(lat_long_hash) {
+    if ($.isEmptyObject(first_complete_lat_long_hash)) {
+      // console.log("GOT ONE");
+      first_complete_lat_long_hash = lat_long_hash;
+    } else {
+      second_complete_lat_long_hash = lat_long_hash;
+
+      // console.log("GOT BOTH: ");
+      // console.log(first_complete_lat_long_hash);
+      // console.log(second_complete_lat_long_hash);
+      // Now we have both.
+
+      getMidPoint(first_complete_lat_long_hash,second_complete_lat_long_hash);
     }
-    for (var i = 0, marker; marker = markers[i]; i++) {
-      marker.setMap(null);
-    }
+  }
 
-    // For each place, get the icon, place name, and location.
-    markers = [];
-    var bounds = new google.maps.LatLngBounds();
-    for (var i = 0, place; place = places[i]; i++) {
-      var image = {
+  function getMidPoint(first_hash,second_hash){
+
+    lat1 = first_hash['k'];
+    long1 = first_hash['B'];
+    lat2 = second_hash['k'];
+    long2 = second_hash['B'];
+    midPointLat = (parseFloat(lat1) + parseFloat(lat2))/2;
+    midPointLong = (parseFloat(long1) + parseFloat(long2))/2;
+    var midPoint = new google.maps.LatLng(midPointLat,midPointLong);
+    drawMidPoint(midPoint);
+    getMidPointVenues(midPoint);
+
+  }
+
+  function drawMidPoint(midPoint){
+    var image = '../images/letter_m.png'
+    var marker = new google.maps.Marker({
+      position: midPoint,
+      map: map,
+      // icon: image
+    });
+  }
+
+  function getMidPointVenues(midPoint){
+    var venue = $('#what_do').val();
+    var request = {
+    location: midPoint,
+    radius: '300',
+    query: venue
+  };
+
+  service = new google.maps.places.PlacesService(map);
+  service.textSearch(request, callbackMark);
+}
+
+function callbackMark(results, status) {
+  if (status == google.maps.places.PlacesServiceStatus.OK) {
+    for (var i = 0; i < 5; i++) {
+      var place = results[i]; 
+      createMarker(place);
+      createList(place);
+      console.log(place);
+    }
+  }
+}
+
+function createMarker(place) {
+    var image = {
         url: place.icon,
         size: new google.maps.Size(71, 71),
         origin: new google.maps.Point(0, 0),
@@ -67,78 +155,23 @@ var markers = [];
         scaledSize: new google.maps.Size(25, 25)
       };
 
-      // Create a marker for each place.
-      var marker = new google.maps.Marker({
-        map: map,
-        icon: image,
-        title: place.name,
-        position: place.geometry.location
-      });
-
-      markers.push(marker);
-
-      bounds.extend(place.geometry.location);
-    }
-
-    map.fitBounds(bounds);
-  });
-
-  // Bias the SearchBox results towards places that are within the bounds of the
-  // current map's viewport.
-  google.maps.event.addListener(map, 'bounds_changed', function() {
-    var bounds = map.getBounds();
-    searchBox.setBounds(bounds);
-  });
-
-
-$('#search').click(function(){
-
-    address1Val = $("#location_one").val(); 
-    address2Val = $("#location_two").val();
-
-  
-  while (address1.length < 1) {
-    address1.push(address1Val);
-    getGeoCodeAddress(address1[0]);
-    }
-
-
-  while (address2.length < 1) {
-    address2.push(address2Val);
-    getGeoCodeAddress(address2[0]);
-    }
-
-     console.log(address1Val + 'val address1');
-     console.log(address1);
-     console.log(address1.length + 'length array address 1');
-    // console.log(address2Val);
-    // console.log(address2.length);
-
-    
- 
-    
-  function getGeoCodeAddress(address) {
-    geocoder.geocode( { 'address': address}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        map.setCenter(results[0].geometry.location);
-        var marker = new google.maps.Marker({
-            map: map,
-            position: results[0].geometry.location
-        });
-      } else {
-        // alert("Geocode was not successful for the following reason: " + status);
-      }
+    var placeLoc = place.geometry.location;
+    var marker = new google.maps.Marker({
+    map: map,
+    position: place.geometry.location,
+    icon: image
     });
-    }
-});
-
-
-function codeAddress() {
-  
-  }
-
-
 }
+
+function createList(place){
+  $('#results').append('<li><span class="name">' + place['name'] + '</span> <span class="price"> ' +  place['price_level']  + '</span> <span class="rating"> ' +  place['rating']  + '</span> </li>');
+}
+
+}); //click function
+}
+ //initialize
+
+
 
 function handleNoGeolocation(errorFlag) {
   if (errorFlag) {

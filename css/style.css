@@ -25,11 +25,12 @@ header p{
 
 body{
     height: 100%;
+    
 }
 
 
 #map-canvas{
-    height: 560px;
+    height: 600px;
     width: 100%;
     z-index: 0;
     position: relative;
@@ -137,16 +138,19 @@ footer ul{
         background-color: #fff;
         padding: 0 11px 0 13px;
         width: 400px;
-        font-family: Roboto;
-        font-size: 15px;
         font-weight: 300;
         text-overflow: ellipsis;
         display: inline-block;
         position: absolute;
       }
 
+    input{
+    font-size: 15px;
+    font-family: 'Alegreya Sans SC', sans-serif; 
+    }
+
       #location_one{
-    left: 100px;
+      left: 100px;
       top: -60px;
       }
 
@@ -160,13 +164,28 @@ footer ul{
       top: 20px;
       }
     
-
+   
     #searchboxes{
       z-index: 1;
      top : 200px;
      position: absolute;
       
     }
+
+    #results {
+      height: 300px;
+      width: 400px;
+      background-color: RGBA(248, 248, 248,.9);
+      display: none;
+      z-index: 1;
+      top : 140px;
+      left: 100px;
+      position: absolute;
+   
+    }
+
+  
+
 
     #what_do:focus {
         border-color: #4d90fe;
@@ -197,7 +216,48 @@ footer ul{
       }
 
       #type-selector label {
-        font-family: Roboto;
+        font-family: 'Roboto', sans-serif;
         font-size: 13px;
         font-weight: 300;
       }
+
+#results li{
+  
+  height: 40px;
+  width: 400px;
+  font-family: 'Alegreya Sans SC', sans-serif;
+  color: #00B6B5;
+  font-size: 20px;
+}
+
+#results li span{
+  width: auto;
+  height: auto;
+
+}
+
+.name{
+float: left;
+}
+
+.price{
+float: left;
+padding-left: 10px;
+
+}
+.rating{
+  float: right;
+  padding-right: 10px; 
+}
+
+#results span{
+display: block;
+}
+
+
+
+
+
+
+
+

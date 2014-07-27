@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="css/reset.css">
     <link rel="stylesheet" href="css/style.css">
     <link href='http://fonts.googleapis.com/css?family=Alegreya+Sans+SC:400,500italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
 
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=none">
 
@@ -41,22 +42,29 @@
 		<div id="map-canvas">
 		</div>
 
+
+<div id="maincontainer">
+	<div id ="leftcontainer">
 		<div id="searchdiv">
 
 			<buttton id="search">
 				<p>Search</p>
 			</button>
+		</div>
+
+		<div id="searchboxes">
+
+			<input id="location_one" class="controls" type="text" placeholder="Location One">
+
+			<input id="location_two" class="controls" type="text" placeholder="Location Two">
+
+			<input id="what_do" class="controls" type="text" placeholder="What do you want to do?">
+		</div>
 	</div>
+		<ul id="results">
 
-	<div id="searchboxes">
-
-		<input id="location_one" class="controls" type="text" placeholder="Location One">
-
-		<input id="location_two" class="controls" type="text" placeholder="Location Two">
-
-		<input id="what_do" class="controls" type="text" placeholder="What do you want to do?">
-
-	</div>
+		</ul>
+</div>
 
 </body>
 	<footer>
@@ -72,6 +80,7 @@
 	</footer>
 					
 		<script src="js/main.js"></script>
+		<script src="js/jquery-ui.js"></script>
 
 
 </html>
