@@ -10,6 +10,7 @@ header{
 header h1{
     padding-top: 20px;
     font-size: 200%;
+     cursor: pointer; 
 }
 
 header p{
@@ -144,20 +145,20 @@ footer ul{
         position: absolute;
       }
 
-    input{
-    font-size: 15px;
-    font-family: 'Alegreya Sans SC', sans-serif; 
+input{
+      font-size: 15px;
+      font-family: 'Alegreya Sans SC', sans-serif; 
     }
 
-      #location_one{
-      left: 100px;
-      top: -60px;
-      }
+    #location_one{
+    left: 100px;
+    top: -60px;
+    }
 
-      #location_two{
-      left: 100px;
-      top: -20px;
-      }
+    #location_two{
+    left: 100px;
+    top: -20px;
+    }
 
       #what_do{
       left: 100px;
@@ -171,21 +172,6 @@ footer ul{
      position: absolute;
       
     }
-
-    #results {
-      height: 300px;
-      width: 400px;
-      background-color: RGBA(248, 248, 248,.9);
-      display: none;
-      z-index: 1;
-      top : 140px;
-      left: 100px;
-      position: absolute;
-   
-    }
-
-  
-
 
     #what_do:focus {
         border-color: #4d90fe;
@@ -221,38 +207,122 @@ footer ul{
         font-weight: 300;
       }
 
-#results li{
-  
-  height: 40px;
+
+ #results {
+  height: 300px;
   width: 400px;
+  background-color: RGBA(248, 248, 248,.9);
+  display: none;
+  z-index: 1;
+  top : 140px;
+  left: 100px;
+  position: absolute;
   font-family: 'Alegreya Sans SC', sans-serif;
   color: #00B6B5;
+  overflow: auto;
+  border: 1px solid black;
+}
+
+#results p{
+  font-weight: bold;
+  font-size: 25px;
+  padding-bottom: 4px;
+  padding-top: 4px;
+  border-bottom: 1px solid black;
+  text-align: center;
+  display: inline-block;
+  width: 100%;
+
+} 
+
+#back {
+  display: inline-block;
+  width: 15%;
+  background-color: RGBA(255, 132, 92, .9);
+  text-align: center;  
+  height: 30px;
+   z-index: 1;
+    position: absolute;
+     padding-bottom: 22px;
+  margin-left: 2px;
+  margin-top: 1px;
+  margin-bottom: 2px;
+
+}
+#back p {
+ padding-bottom: 9px;
+  color: #2E5462;
+  font-family: 'Alegreya Sans SC', sans-serif;
+  font-size: 10px;
+}
+
+#results li{
+  
+  height: 60px;
+  width: 390px;
   font-size: 20px;
+  margin-left: 5px;
+  border-bottom: 1px solid black;
+  padding-bottom: 20px;
+  padding-top: 10px;
 }
 
-#results li span{
-  width: auto;
-  height: auto;
-
-}
 
 .name{
-float: left;
+padding-left: 18px;
+width: 100%;
+font-weight: bold;
+margin-bottom: 18px;
 }
+
 
 .price{
-float: left;
-padding-left: 10px;
-
+  font-size: 15px;
+  width: auto;
 }
+
 .rating{
-  float: right;
-  padding-right: 10px; 
+  font-size: 15px;
+  width: auto;
+  padding-left: 10px;
+  top: 20px;
 }
 
-#results span{
-display: block;
+.address{
+  font-size: 15px;
+  width: auto;
+  padding-left: 10px;
 }
+
+.left{
+  width: 70%;
+  text-align: left;
+}
+.right{
+  width: 25%;
+  text-align: right;
+}
+
+.photo{
+  width: 65px;
+  height: 65px;
+}
+
+.photo img{
+  width: 100%;
+  height: 100%;
+}
+
+#results div{
+display: inline-block;
+
+
+}
+
+/*#leftcontainer{
+  z-index: 1;
+  position: relative;
+}*/
 
 
 

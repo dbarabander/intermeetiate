@@ -5,6 +5,8 @@ var service;
 function initialize() {
   var address1 = [];
   var address2 = [];
+  var markers = [];
+  idMap = {};
 
   geocoder = new google.maps.Geocoder();
   var mapOptions = {
@@ -33,6 +35,25 @@ $('#what_do').keypress(function(e){
             $('#search').click();//Trigger search button click event
         }
     });
+
+$('#logo').click(function(){
+  document.location.href="../index.html"
+});
+
+// $('ul').on('click','li', function(){
+//   $(this).("cross");
+
+// });
+
+$('#back').click(function(){
+$('#leftcontainer').show('slide', {direction: 'right'}, 1000);
+$('#results').hide('slide', {direction: 'right'}, 1000);
+});
+
+$('ul').on('click','li', function(){
+var position = $(this).data('position');
+map.panTo(position);
+});
 
 $('#search').click(function(){
 
@@ -121,6 +142,8 @@ geocoder.geocode({'address': address}, callback);
       map: map,
       // icon: image
     });
+    map.panTo(midPoint);
+    map.setZoom(14);
   }
 
   function getMidPointVenues(midPoint){
@@ -137,7 +160,7 @@ geocoder.geocode({'address': address}, callback);
 
 function callbackMark(results, status) {
   if (status == google.maps.places.PlacesServiceStatus.OK) {
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 8; i++) {
       var place = results[i]; 
       createMarker(place);
       createList(place);
@@ -161,10 +184,41 @@ function createMarker(place) {
     position: place.geometry.location,
     icon: image
     });
+    markers.push(marker);
 }
 
-function createList(place){
-  $('#results').append('<li><span class="name">' + place['name'] + '</span> <span class="price"> ' +  place['price_level']  + '</span> <span class="rating"> ' +  place['rating']  + '</span> </li>');
+function createList(place) {
+
+  var name = $('<div class ="name">' + place['name'] + '</div>');
+  var price = $('<div class ="price">' + priceConverter(place['price_level']) + '</div>');
+  var rating = $('<div class ="rating">' + place['rating'] + '</div>');
+  var address = $('<div class = "address">' + addressAbbreviator(place['formatted_address']) + '</div>');
+  var photo = $('<div class="photo"><img src="' + getPhoto(place) + '"></div>');
+  var left = $('<div class="left"></div>').append(name).append(price).append(rating).append(address);
+  var right = $('<div class="right"></div>').append(photo);
+  var li = $('<li></li>').append(left).append(right).data('id', place['id']).data('position', place.geometry.location);
+
+  $('#results').append(li);
+
+}
+
+function priceConverter(price){
+  var dollarLevel = Array(parseInt(price) + 1).join('$');
+  return dollarLevel
+
+}
+
+function getPhoto(place){
+  var photoArray = place.photos;
+  photo = photoArray[0].getUrl({'maxWidth': 75, 'maxHeight': 75})
+    return photo;
+}
+
+function addressAbbreviator(address){
+  var addressArray = address.split(',');
+  //array is 4
+  newAddress = addressArray.slice(0,(addressArray.length-1));
+  return newAddress
 }
 
 }); //click function
