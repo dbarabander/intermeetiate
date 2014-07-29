@@ -7,8 +7,7 @@ function initialize() {
   var address2 = [];
   var markers = [];
   var midPointArray = [];
-  // var images = [];
-  idMap = {};
+  var images = [];
 
   geocoder = new google.maps.Geocoder();
   var mapOptions = {
@@ -42,10 +41,6 @@ $('#logo').click(function(){
   document.location.href="../index.html"
 });
 
-// $('ul').on('click','li', function(){
-//   $(this).("cross");
-
-// });a
 
 $('#back').click(function(){
     $('#results').hide('slide', {direction: 'right'}, 700,function(){
@@ -63,16 +58,17 @@ map.panTo(position);
 $('ul').on('mouseover','li', function(){
 var markerId = $(this).attr('id');
 var marker = markers[markerId];
-marker.setIcon("images/letter_a.png")
+marker.setIcon("images/letter_a.png");
+marker.setVisible(true)
 });
+//i can get rid of funciton now? remove marker? yea
+$('ul').on('mouseout','li', function(){
 
-// $('ul').on('mouseout','li', function(){
-
-// var markerId = $(this).attr('id');
-// var marker = markers[markerId];
-// var image = images[markerId];
-// marker.setIcon(image);
-// });
+var markerId = $(this).attr('id');
+var marker = markers[markerId];
+var image = images[markerId];
+marker.setIcon(image);
+});
 
 $('#search').click(function(){
 $('#searchdiv').addClass('searched');
@@ -92,22 +88,22 @@ $('#leftcontainer').hide('slide', {direction: 'right'}, 700, function(){
 if ($('#searchdiv').hasClass('edit')){
   $('#results li').remove();
 
+  removeMarker(markers);
+  removeMarker(address1);
+  removeMarker(address2);
+  removeMarker(midPointArray);
+  markers = [];
+  images = [];
+  console.log(markers);
+
+
   getGeoCodeAddress(address1Val);
   getGeoCodeAddress(address2Val);
 
-removeMarker(markers);
-removeMarker(address1);
-removeMarker(address2);
-removeMarker(midPointArray);
-
+} else {
+  getGeoCodeAddress(address1Val);
+  getGeoCodeAddress(address2Val);
 }
-
-
-
-else{
-  getGeoCodeAddress(address1Val);
-  getGeoCodeAddress(address2Val);
-};
 
 $('#searchdiv').removeClass('edit');
 
@@ -137,8 +133,9 @@ $('#searchdiv').removeClass('edit');
             position: results[0].geometry.location
         });
     address1.push(marker);
-    address2.push(marker);
-
+    address2.push(marker); //  w/e w/ewait wut...? now i'm confused how ti works hahah
+//yea it's irrelvant it resets address 1 and 2 but i think they're cleared later anyways.
+// not anymore bc my new logic only clears [0]. old logic loops trhough.
         checkForBothLocations(lat_long_hash);
       } else {
         // alert("Geocode was not successful for the following reason: " + status);
@@ -199,7 +196,7 @@ geocoder.geocode({'address': address}, callback);
     var venue = $('#what_do').val();
     var request = {
     location: midPoint,
-    radius: '200',
+    radius: '100',
     query: venue
   };
 
@@ -209,15 +206,18 @@ geocoder.geocode({'address': address}, callback);
 
 function callbackMark(results, status) {
   if (status == google.maps.places.PlacesServiceStatus.OK) {
-    for (var i = 0; i < 8; i++) {
-      var place = results[i]; 
-      createMarker(place);
-      createList(place,i);
+    // thi is better way to do it.. oringinally i had this...let me show
+    // this isn't good. if u get less than 8 results back ur gonna break
+    for (var i = 0; i < 8 && i < results.length; i++) {
+      var place = results[i];  // this could be out of bounds if u only get, e..g, 4 results back
+      createList(place,i,results);
+      createMarker(place,i,results);
     }
   }
 }
 
-function createMarker(place) {
+// btw this is redundant.. u take results[i] and results and i as parameters
+function createMarker(place, i, results) {
     var image = {
         url: place.icon,
         size: new google.maps.Size(71, 71),
@@ -228,12 +228,12 @@ function createMarker(place) {
 
     var placeLoc = place.geometry.location;
     var marker = new google.maps.Marker({
-    map: map,
-    position: place.geometry.location,
-    icon: image
+      map: map,
+      position: place.geometry.location,
+      icon: image
     });
     markers.push(marker);
-    // images.push(image);
+    images.push(image);
 
   google.maps.event.addListener(marker, 'mouseover', function() {
     marker.setIcon("images/letter_a.png");
@@ -241,34 +241,50 @@ function createMarker(place) {
 
   google.maps.event.addListener(marker, 'mouseout', function() {
     marker.setIcon(image);
-});
+    });    
 }
 
-function createList(place,i) {
+function createList(place, i, results) {
+    // only thing i can think of is one of these lines is failing.
+    // e.g., the place doesn't have an image or something and ur
+    // doing some logic that assumes an image will def be there
+    // can we look at js error console?
 
-  var name = $('<div class ="name">' + place['name'] + '</div>');
-  var price = $('<div class ="price">' + priceConverter(place['price_level']) + '</div>');
-  var rating = $('<div class ="rating">' + place['rating'] + '</div>');
-  var address = $('<div class = "address">' + addressAbbreviator(place['formatted_address']) + '</div>');
-  var photo = $('<div class="photo"><img src="' + getPhoto(place) + '"></div>');
-  var left = $('<div class="left"></div>').append(name).append(price).append(rating).append(address);
-  var right = $('<div class="right"></div>').append(photo);
-  var li = $('<li id="'+ i +'"></li>').append(left).append(right).data('id', place['id']).data('position', place.geometry.location);
+    //of course? i thought of that 2. but the li isn't even being created (if that was true woudln't it just exist but not appear or be fucked up looking or something? )
+    // idk js is weird. sometimes it short-circuits if something goes wrong
+    var name = $('<div class ="name">' + place['name'] + '</div>');
+    var price = $('<div class ="price">' + priceConverter(place['price_level']) + '</div>');
+    var rating = $('<div class ="rating">' + place['rating'] + '</div>');
+    var address = $('<div class = "address">' + addressAbbreviator(place['formatted_address']) + '</div>');
+    var photo;
+    if (place['photos'] && place.photos.length > 0) {
+      photo = $('<div class="photo"><img src="' + getPhoto(place) + '"></div>');
+    } else {
+      photo = $('<div class="photo"></div>');
+    }
+    var left = $('<div class="left"></div>').append(name).append(price).append(rating).append(address);
+    var right = $('<div class="right"></div>').append(photo);
+    var li = $('<li id="'+ i +'"></li>').append(left).append(right).data('id', place['id']).data('position', place.geometry.location);
 
-  $('#results').append(li);
-
+    $('#results').append(li);
 }
 
 function priceConverter(price){
-  var dollarLevel = Array(parseInt(price) + 1).join('$');
-  return dollarLevel
+  // ok here's error. maybe that one doesn't have a price?
+  // yeah, and u parseInt("") or something, and it breaks.
+  // we need to do this.
+  var x = parseInt(price);
+  if (isNaN(x)) {
+    return "";
+  } else {
+    return Array(parseInt(price) + 1).join('$');
+  }
 
 }
 
 function getPhoto(place){
   var photoArray = place.photos;
-  photo = photoArray[0].getUrl({'maxWidth': 75, 'maxHeight': 75})
-    return photo;
+  return photoArray[0].getUrl({'maxWidth': 75, 'maxHeight': 75})
 }
 
 function addressAbbreviator(address){
@@ -281,10 +297,43 @@ function addressAbbreviator(address){
 function removeMarker(array){
   for (index = 0; index < array.length; index++) {
   marker = array[index]
-  marker.setMap(null);
+  marker.setVisible(false);
   }
-  array = [];
 }
+
+// function removeMarker(array){
+//   for (index = 0; index < (array.length); index++) {
+//   var marker = array[index] // this isn't tho. we can talk about details later
+//   marker.setMap(null); //yea that's confusing
+  // marker.setVisible(false);
+  // wuy did u change form setMap(null) to setVisible(false)
+  //because it was making ALL my markers false and i didn't realize to reset when i replotted
+  // ok i'm going to remove this function bc it's clearer to just do it inline
+  // }
+  // this doesn't do what u think it does.
+  // array is a *copy* of the param. e.g.,
+  // function x(a) { a = 4;}
+  // var y = 3; x(y); // y is still 3. only a is changed (Which was a copy)
+
+  // array = []; //so this is worthless b/c it's a copy. yes
+  // basically array is a reference. the thing passed into the function
+  // doesn't hold ALL the contens. otherwise, if u had an array of size 1 million,
+  // you'd need to copy 1 million values. that's dumb. instead, it just 
+  // passes the memoery address of where the array begins
+  // but when you say array=, you are changing the starting location
+  // of THIS array, the other one still points to old memory address
+  // diagrams are useful for this. i'll explain better later
+  // ok yeah starting to make sense
+// }
+
+//wtF!!! idk. just cleaned stuff up, not sure what changed. it's cleaner but the bug is still there i d
+//dont get how when we're restricting !!!
+// o ok. i thought the bug went away which is why i was confused. i don't think
+// any logic has changed yet. yeah.
+
+// function addMarker(marker){
+//     marker.setVisible(true);
+//   }
 
 }); //click function
 }
